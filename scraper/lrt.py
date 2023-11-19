@@ -6,8 +6,8 @@ import os
 import datetime
 
 # Constants
-URL = 'https://www.tv3.lt'
-source = 'TV3'
+URL = 'https://www.lrt.lt'
+source = 'LRT'
 TOP_ARTICLES_LIMIT = 2
 
 # Environment Variables
@@ -36,16 +36,18 @@ def delete_todays_records(source):
 def scrape_website(url, source):
     try:
         response = requests.get(url)
+        # Force correct encoding
+        response.encoding = 'utf-8'
         if response.status_code == 200:
             print("Successfully retrieved URL:", url)
         else:
             print("Failed to retrieve URL. Status code:", response.status_code)
             return []
 
-        soup = BeautifulSoup(response.text, 'html.parser')
+        soup = BeautifulSoup(response.content.decode(response.encoding), 'html.parser')
 
         # Add the correct selector here
-        titles = soup.find_all('div', class_='mainItemTitle')
+        titles = soup.find_all('h3', class_='news__title')
 
         # Limit to top 10 articles
         titles = titles[:TOP_ARTICLES_LIMIT]
