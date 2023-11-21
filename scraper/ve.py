@@ -9,7 +9,7 @@ import re
 # Constants
 URL = 'https://ve.lt'
 source = 'vakaru ekspresas'
-TOP_ARTICLES_LIMIT = 2
+TOP_ARTICLES_LIMIT = 10
 
 # Environment Variables
 SQL_SERVER_CONNECTION = os.environ.get('DB_CONN_NEWS')

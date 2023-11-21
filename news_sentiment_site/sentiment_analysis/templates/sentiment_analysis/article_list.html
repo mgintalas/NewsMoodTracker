@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>News Sentiment Analysis</title>
+</head>
+<body>
+    <h1>News Articles Sentiment Analysis</h1>
+    <ul>
+        {% for article in articles %}
+            <li>
+                <strong>{{ article.title }}</strong> - Sentiment Score: {{ article.sentiment_score }}
+                <br>
+                <a href="{{ article.url }}">Read Article</a>
+            </li>
+        {% empty %}
+            <li>No articles available.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

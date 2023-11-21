@@ -8,7 +8,7 @@ import datetime
 # Constants
 URL = 'https://www.delfi.lt/'
 source = 'Delfi'
-TOP_ARTICLES_LIMIT = 2
+TOP_ARTICLES_LIMIT = 10
 
 # Environment Variables
 SQL_SERVER_CONNECTION = os.environ.get('DB_CONN_NEWS')
