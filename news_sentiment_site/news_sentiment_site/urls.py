@@ -23,5 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('sentiment/', include('sentiment_analysis.urls')),
     path('', lambda r: HttpResponseRedirect('sentiment/articles/')),  # Redirect root to articles
-    path('', home, name='home')
+    #path('', home, name='home')
 ]

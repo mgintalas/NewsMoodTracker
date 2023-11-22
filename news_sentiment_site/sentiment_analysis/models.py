@@ -14,3 +14,41 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+class ViewAvgSentimentBySource(models.Model):
+    source = models.CharField(max_length=255, primary_key=True)
+    avgsentiment = models.DecimalField(max_digits=5, decimal_places=2)
+
+    class Meta:
+        managed = False
+        db_table = 'View_AvgSentimentBySource'
+        
+        
+class ViewNationalMood(models.Model):
+    nationalmood = models.DecimalField(max_digits=5, decimal_places=2, primary_key=True)
+
+    class Meta:
+        managed = False
+        db_table = 'View_NationalMood'
+        
+        
+class ViewSentimentHeatmap(models.Model):
+    source = models.CharField(max_length=255, primary_key=True)
+    verynegative = models.IntegerField()
+    negative = models.IntegerField()
+    neutral = models.IntegerField()
+    positive = models.IntegerField()
+    verypositive = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'View_SentimentHeatmap'
+        
+class ViewSentimentOverTime(models.Model):
+    date = models.DateField(primary_key=True)
+    avgsentiment = models.DecimalField(max_digits=5, decimal_places=2)
+    
+    class Meta:
+        managed = False
+        db_table = 'View_SentimentOverTime'
+        
