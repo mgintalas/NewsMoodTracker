@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import SentimentList from './SentimentList';
+import AvgSentimentBySource from './AvgSentimentBySource';
+import NationalMood from './NationalMood';
+import SentimentHeatmap from './SentimentHeatmap';
+import SentimentOverTime from './SentimentOverTime';
 
-function App() {
+const App = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div className="container-fluid">
+          <a className="navbar-brand" href="#">News Sentiment Dashboard</a>
+        </div>
+      </nav>
+      <div className="container mt-4">
+        <NationalMood />
+        <AvgSentimentBySource />
+        <SentimentOverTime />
+        <SentimentHeatmap />
+      </div>
     </div>
   );
-}
+};
 
 export default App;

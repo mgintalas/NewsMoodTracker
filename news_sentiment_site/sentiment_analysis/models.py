@@ -25,7 +25,8 @@ class ViewAvgSentimentBySource(models.Model):
         
         
 class ViewNationalMood(models.Model):
-    nationalmood = models.DecimalField(max_digits=5, decimal_places=2, primary_key=True)
+    mood = models.CharField(max_length=255, primary_key=True)
+    score = models.DecimalField(max_digits=5, decimal_places=2)
 
     class Meta:
         managed = False
