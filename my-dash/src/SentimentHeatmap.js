@@ -2,59 +2,25 @@
 import React, { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Box, Typography, CircularProgress, Alert, useTheme } from '@mui/material';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const SentimentHeatmap = () => {
-  const [heatmapData, setHeatmapData] = useState({});
+  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const theme = useTheme(); // Using MUI theme for styling
 
   useEffect(() => {
     setIsLoading(true);
-    fetch('http://localhost:8000/sentiment/api/sentiment-heatmap/') // Adjust the endpoint as needed
+    fetch('http://localhost:8000/sentiment/api/sentiment-heatmap/')
       .then(response => {
         if (!response.ok) throw new Error('Network response was not ok');
         return response.json();
       })
       .then(data => {
-        const labels = data.map(d => d.source);
-        const veryNegativeData = data.map(d => d.verynegative);
-        const negativeData = data.map(d => d.negative);
-        const neutralData = data.map(d => d.neutral);
-        const positiveData = data.map(d => d.positive);
-        const veryPositiveData = data.map(d => d.verypositive);
-
-        setHeatmapData({
-          labels,
-          datasets: [
-            {
-              label: 'Very Negative',
-              data: veryNegativeData,
-              backgroundColor: 'rgba(255, 99, 132, 0.5)'
-            },
-            {
-              label: 'Negative',
-              data: negativeData,
-              backgroundColor: 'rgba(255, 159, 64, 0.5)'
-            },
-            {
-              label: 'Neutral',
-              data: neutralData,
-              backgroundColor: 'rgba(255, 205, 86, 0.5)'
-            },
-            {
-              label: 'Positive',
-              data: positiveData,
-              backgroundColor: 'rgba(75, 192, 192, 0.5)'
-            },
-            {
-              label: 'Very Positive',
-              data: veryPositiveData,
-              backgroundColor: 'rgba(54, 162, 235, 0.5)'
-            }
-          ]
-        });
+        setData(data);
         setIsLoading(false);
       })
       .catch(error => {
@@ -63,15 +29,72 @@ const SentimentHeatmap = () => {
       });
   }, []);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!heatmapData.labels) return <div>Data not available</div>;
+  const chartData = {
+    labels: data.map(d => d.source),
+    datasets: [
+      {
+        label: 'Very Negative',
+        data: data.map(d => d.verynegative),
+        backgroundColor: theme.palette.error.main,
+      },
+      {
+        label: 'Negative',
+        data: data.map(d => d.negative),
+        backgroundColor: theme.palette.warning.main,
+      },
+      {
+        label: 'Neutral',
+        data: data.map(d => d.neutral),
+        backgroundColor: theme.palette.info.main,
+      },
+      {
+        label: 'Positive',
+        data: data.map(d => d.positive),
+        backgroundColor: theme.palette.success.main,
+      },
+      {
+        label: 'Very Positive',
+        data: data.map(d => d.verypositive),
+        backgroundColor: theme.palette.primary.main,
+      },
+    ],
+  };
+
+  const options = {
+    indexAxis: 'y',
+    elements: {
+      bar: {
+        borderWidth: 2,
+      },
+    },
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'right',
+        align: 'start',
+      },
+      title: {
+        display: true,
+        text: 'Sentiment Heatmap',
+      },
+    },
+  };
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    return <Alert severity="error">{error}</Alert>;
+  }
 
   return (
-    <div>
-      <h2 className="mb-4 text-center">Sentiment Heatmap</h2>
-      <Bar data={heatmapData} options={{ responsive: true, indexAxis: 'y' }} />
-    </div>
+    <Box sx={{ mt: 4, mb: 4 }}>
+      <Typography variant="h4" gutterBottom align="center">
+        Sentiment Heatmap
+      </Typography>
+      <Bar data={chartData} options={options} />
+    </Box>
   );
 };
 
